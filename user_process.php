@@ -73,8 +73,33 @@ function copyMP3($db, $teamnumber, $name, $url){
         $scdata = str_replace($sclink, "", $url);
         $mp3url = $sc2mp3  .  $scdata  .  "/download";
         $safename= substr($scdata, strpos($scdata,"/"));
-        $mp3 = file_get_contents($mp3url);
+        
+        /* Only successful if extension=php_openssl.dll is enabled in php.ini, test with:
+        $w = stream_get_wrappers();
+        echo 'openssl: ',  extension_loaded  ('openssl') ? 'yes':'no', "\n";
+	      echo 'http wrapper: ', in_array('http', $w) ? 'yes':'no', "\n";
+	      echo 'https wrapper: ', in_array('https', $w) ? 'yes':'no', "\n";
+	      echo 'wrappers: ', var_dump($w); */
+        
+        $mp3 = @file_get_contents($mp3url);
+        
+        //Handle potential failure of file_get_contents with cURL fallback
+        if($mp3 === FALSE){
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_URL, $mp3url);
+            curl_setopt($ch, CURLOPT_REFERER, $mp3url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            $mp3 = curl_exec($ch);
+            curl_close($ch);
+          
+        }
+        
+        
         $filename = "team_"  .  $teamnumber  .  "_"  .  $safename  .  ".mp3";
+        
         file_put_contents($filename,$mp3);
     }
   
