@@ -52,7 +52,10 @@
     
     $songs_to_copy = $db->query('SELECT * FROM songs WHERE approved="" ORDER BY id DESC');
     
-
+    foreach($songs_to_copy as $song){
+        
+        
+    }
 
     
 ?>
