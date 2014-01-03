@@ -65,6 +65,17 @@ function submitSong($reddit){
 
 }
 
+function copyMP3($db, $teamnumber, $url){
+  $sclink = "https://soundcloud.com/";
+  
+  if(strpos($url,$sclink) !== false){
+    
+    
+  }
+  
+}
+
+
 function redirect($page = 'index.php'){
     header('Location: '.$page);
 
