@@ -65,13 +65,18 @@ function submitSong($reddit){
 
 }
 
-function copyMP3($db, $teamnumber, $url){
+function copyMP3($db, $teamnumber, $name, $url){
   $sclink = "https://soundcloud.com/";
+  $sc2mp3 = "https://soundcloud2mp3.com/";
   
-  if(strpos($url,$sclink) !== false){
-    
-    
-  }
+    if(strpos($url,$sclink) !== false){
+        $scdata = str_replace($sclink, "", $url);
+        $mp3url = $sc2mp3  .  $scdata  .  "/download";
+        $safename= substr($scdata, strpos("/"));
+        $mp3 = file_get_contents($mp3url);
+        $filename = "team_"  .  $teamnumber  .  "_"  .  $safename  .  ".mp3";
+        file_put_contents($filename);
+    }
   
 }
 
