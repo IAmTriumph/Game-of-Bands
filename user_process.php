@@ -72,7 +72,7 @@ function copyMP3($db, $teamnumber, $name, $url){
     if(strpos($url,$sclink) !== false){
         $scdata = str_replace($sclink, "", $url);
         $mp3url = $sc2mp3  .  $scdata  .  "/download";
-        $safename= substr($scdata, strpos("/"));
+        $safename= substr($scdata, strpos($scdata,"/"));
         $mp3 = file_get_contents($mp3url);
         $filename = "team_"  .  $teamnumber  .  "_"  .  $safename  .  ".mp3";
         file_put_contents($filename,$mp3);
